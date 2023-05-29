@@ -91,8 +91,8 @@
     <input id="search-output" type="text"/>
     <span>I want a...</span>
     <button onclick="search(this.value, g('search-input'), 'androgynous')">Andogynous name</button>
-    <button onclick="search(this.value, g('search-input'), 'androgynous')">Feminine name</button>
-    <button onclick="search(this.value, g('search-input'), 'androgynous')">Masculine name</button>
+    <button onclick="search(this.value, g('search-input'), 'feminine')">Feminine name</button>
+    <button onclick="search(this.value, g('search-input'), 'masculine')">Masculine name</button>
     <canvas id="canvas"></canvas>
 
     <script>
@@ -121,13 +121,13 @@
         (async function() {
             const response = await fetch('/transname/fem.txt');
             const text = await response.text();
-            andro = text.split('\n');
+            fem = text.split('\n');
         })();
         var masc=[];
         (async function() {
             const response = await fetch('/transname/masc.txt');
             const text = await response.text();
-            andro = text.split('\n');
+            masc = text.split('\n');
         })();
         var wordList = andro;
 
