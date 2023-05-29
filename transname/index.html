@@ -113,19 +113,19 @@
         
         var andro=[];
         (async function() {
-            const response = await fetch('/andro.txt');
+            const response = await fetch('/transname/andro.txt');
             const text = await response.text();
             andro = text.split('\n');
         })();
         var fem=[];
         (async function() {
-            const response = await fetch('/fem.txt');
+            const response = await fetch('/transname/fem.txt');
             const text = await response.text();
             andro = text.split('\n');
         })();
         var masc=[];
         (async function() {
-            const response = await fetch('/masc.txt');
+            const response = await fetch('/transname/masc.txt');
             const text = await response.text();
             andro = text.split('\n');
         })();
