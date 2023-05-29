@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transname</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #F5A9B8;
+            color:  white;
+            font-family: 'Debby';
+            font-size: 40px;
+        }
+        #logo {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        #search-input {
+            width: 300px;
+            height: 30px;
+            text-align:center;
+            font-family: Brush Script MT, Brush Script Std, bold;
+            font-size:24px;
+            z-index: 10;
+            transition: ease 2s;
+            box-shadow: 0 30px 40px rgba(0,0,0,.1);
+            border-radius: 25px;
+        }
+        .visible {
+          visibility: visible;
+          opacity: 1;
+          transition: opacity 2s linear;
+        }
+        .hidden {
+          visibility: hidden;
+          opacity: 0;
+          transition: visibility 0s 2s, opacity 2s linear;
+        }
+        #search-output {
+            width: 300px;
+            height: 30px;
+            text-align:center;
+            font-family: Brush Script MT, Brush Script Std, bold;
+            font-size:24px;
+            position: relative;
+            top: -35px;
+            box-shadow: 0 30px 40px rgba(0,0,0,.1);
+            border-radius: 25px;
+
+        }
+        #search-input:focus {
+            outline: none;
+        }
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 20;
+        }
+        button {
+          background-color: #5BCEFA;
+          border: none;
+          color: white;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          cursor: pointer;
+          font-family: Brush Script MT, Brush Script Std, cursive;
+          border-radius: 25px;
+        }
+
+        @font-face {
+            font-family: 'Debby'; /*a name to be used later*/
+            src: url('./Debby.ttf'); /*URL to font*/
+        }
+    </style>
+</head>
+<body>
+    <div id="logo"><b>Transname</b></div>
+    <input id="search-input" type="text" placeholder="Your name..." onsearch="search(this.value, this, 'androgynous')"/>
+    <input id="search-output" type="text"/>
+    <span>I want a...</span>
+    <button onclick="search(this.value, g('search-input'), 'androgynous')">Andogynous name</button>
+    <button onclick="search(this.value, g('search-input'), 'androgynous')">Feminine name</button>
+    <button onclick="search(this.value, g('search-input'), 'androgynous')">Masculine name</button>
+    <canvas id="canvas"></canvas>
+
+    <script>
+
+
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray;
+
+        const searchBar = document.getElementById("search-input");
+        const buttonRect = searchBar.getBoundingClientRect();
+        const emoji = ["✨","💖","😽","🥰","🏳️‍⚧️","🌈","🏳️‍🌈"];
+
+        
+        var andro=[];
+        (async function() {
+            const response = await fetch('/andro.txt');
+            const text = await response.text();
+            andro = text.split('\n');
+        })();
+        var fem=[];
+        (async function() {
+            const response = await fetch('/fem.txt');
+            const text = await response.text();
+            andro = text.split('\n');
+        })();
+        var masc=[];
+        (async function() {
+            const response = await fetch('/masc.txt');
+            const text = await response.text();
+            andro = text.split('\n');
+        })();
+        var wordList = andro;
+
+        function g(a){
+            return document.getElementById(a);
+        }
+        function search(value, bar, gender) {
+            if(gender=="feminine"){
+                wordList = fem;
+            }
+            else if(gender=="masculine"){
+                wordList = masc;
+            }
+            bar.classList.remove("visible");
+            bar.classList.add("hidden");
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    particlesArray.push(new Particle(i));
+                }, i * 10);
+            }
+
+            let minDistance = Infinity;
+            let closestWord = "";
+
+            for(let word of wordList) {
+                let levDist = levenshtein(value, word);
+                if (levDist < minDistance) {
+                    minDistance = levDist;
+                    closestWord = word;
+                }
+            }
+
+            particlesArray = [];
+            document.getElementById("search-output").value = closestWord;
+            
+
+        }
+
+        function levenshtein(a, b) {
+            var matrix = [];
+
+            if (a.length == 0) return b.length;
+            if (b.length == 0) return a.length;
+
+            for (var i = 0; i <= b.length; i++){
+                matrix[i] = [i];
+            }
+
+            for (var j = 0; j <= a.length; j++){
+                matrix[0][j] = j;
+            }
+
+            for (var i = 1; i <= b.length; i++){
+                for (var j = 1; j <= a.length; j++){
+                    if (b.charAt(i-1) == a.charAt(j-1)){
+                        matrix[i][j] = matrix[i-1][j-1];
+                    }
+                    else {
+                        matrix[i][j] = Math.min(matrix[i-1][j-1] + 1,
+                                                Math.min(matrix[i][j-1] + 1,
+                                                         matrix[i-1][j] + 1));
+                    }
+                }
+            }
+
+            return matrix[b.length][a.length];
+        }
+
+        Array.prototype.sample = function(){
+          return this[Math.floor(Math.random()*this.length)];
+        }
+        class Particle {
+            constructor(i) {
+                this.x = buttonRect.left + (buttonRect.width / 100) * i;
+                this.y = buttonRect.top + Math.random() * buttonRect.height;
+                this.size = 0;
+                this.maxSize = Math.random() * 50 + 50;
+                this.color = 'rgba(0, 0, 0, 1)';
+                this.E = emoji.sample();
+            }
+            update() {
+                if (this.size < this.maxSize) this.size += 0.5;
+                this.color = `rgba(0, 0, 0, ${1 - this.size/this.maxSize})`;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.font = `${this.size}px Arial`;
+                ctx.fillText(this.E, this.x, this.y);
+            }
+        }
+
+        function handleParticles() {
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+
+                if (this.size >= this.maxSize) {
+                    particlesArray.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            handleParticles();
+            requestAnimationFrame(animate);
+        }
+
+        particlesArray = [];
+        animate();
+    </script>
+</body>
+</html>

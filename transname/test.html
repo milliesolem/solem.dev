@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #ccc;
+        }
+
+        #emoji-button {
+            position: relative;
+            font-size: 2rem;
+            padding: 20px;
+        }
+
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <button id="emoji-button">Click Me!</button>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray;
+
+        const emojiButton = document.getElementById('emoji-button');
+        const buttonRect = emojiButton.getBoundingClientRect();
+        const emoji = "✨";
+
+        emojiButton.addEventListener('click', (event) => {
+            for (let i = 0; i < 100; i++) {
+                // Delay the creation of particles based on their horizontal position
+                setTimeout(() => {
+                    particlesArray.push(new Particle(i));
+                }, i * 10);
+            }
+        });
+
+        class Particle {
+            constructor(i) {
+                this.x = buttonRect.left + (buttonRect.width / 100) * i;
+                this.y = buttonRect.top + Math.random() * buttonRect.height;
+                this.size = 0;
+                this.maxSize = Math.random() * 50 + 50;
+                this.color = 'rgba(0, 0, 0, 1)';
+            }
+            update() {
+                if (this.size < this.maxSize) this.size += 0.5;
+                this.color = `rgba(0, 0, 0, ${1 - this.size/this.maxSize})`;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.font = `${this.size}px Arial`;
+                ctx.fillText(emoji, this.x, this.y);
+            }
+        }
+
+        function handleParticles() {
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+
+                if (this.size >= this.maxSize) {
+                    particlesArray.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            handleParticles();
+            requestAnimationFrame(animate);
+        }
+
+        particlesArray = [];
+        animate();
+    </script>
+</body>
+</html>
