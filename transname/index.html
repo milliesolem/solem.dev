@@ -85,7 +85,7 @@
         }
     </style>
 </head>
-<body>
+<body class="hidden">
     <div id="logo"><b>Transname</b></div>
     <input id="search-input" type="text" placeholder="Your name..." onsearch="search(this.value, this, 'androgynous')"/>
     <input id="search-output" type="text"/>
@@ -113,34 +113,37 @@
         
         var andro=[];
         (async function() {
-            const response = await fetch('/transname/andro.txt');
+            const response = await fetch('https://solem.dev/transname/andro.txt');
             const text = await response.text();
             andro = text.split('\n');
         })();
         var fem=[];
         (async function() {
-            const response = await fetch('/transname/fem.txt');
+            const response = await fetch('https://solem.dev/transname/fem.txt');
             const text = await response.text();
             fem = text.split('\n');
         })();
         var masc=[];
         (async function() {
-            const response = await fetch('/transname/masc.txt');
+            const response = await fetch('https://solem.dev/transname/masc.txt');
             const text = await response.text();
             masc = text.split('\n');
+            document.body.classList.remove("hidden");
+            document.body.classList.add("visible");
         })();
-        var wordList = andro;
 
         function g(a){
             return document.getElementById(a);
         }
         function search(value, bar, gender) {
-            if(gender=="feminine"){
+            wordList = andro;
+            if(gender=="feminine" && fem.length>0){
                 wordList = fem;
             }
-            else if(gender=="masculine"){
+            else if(gender=="masculine"&& masc.length>0){
                 wordList = masc;
             }
+            console.log(wordList)
             bar.classList.remove("visible");
             bar.classList.add("hidden");
             for (let i = 0; i < 100; i++) {
@@ -153,17 +156,25 @@
             let closestWord = "";
 
             for(let word of wordList) {
-                let levDist = levenshtein(value, word);
+                let levDist = levenshtein(bar.value, word);
                 if (levDist < minDistance) {
                     minDistance = levDist;
                     closestWord = word;
+                    console.log(levDist,word);
                 }
             }
 
             particlesArray = [];
             document.getElementById("search-output").value = closestWord;
-            
-
+            if(gender=="feminine" && fem.length>0){
+                fem = fem.filter(function(item) {return item !== closestWord})
+            }
+            else if(gender=="masculine"&& masc.length>0){
+                masc = masc.filter(function(item) {return item !== closestWord})
+            }
+            else{
+                adro = andro.filter(function(item) {return item !== closestWord})
+            }
         }
 
         function levenshtein(a, b) {
