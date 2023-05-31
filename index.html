@@ -15,6 +15,41 @@
 			color:#3AE63C;
 		}
 	</style>
+	<script>
+		// this is for preventing web scrapers and bots
+		// from getting my email and showering
+		// me with spam :)
+		// my email is [my first name]@[this domain].
+
+		function email(){
+
+			let password = prompt("Please verify that your are human :))\nSquare root of 144?", "");
+
+			if (parseInt(password,10)**2 == 144){
+				a = [
+						0x3c, 0x24, 0xc6, 0xbd,
+						0x20, 0x60, 0xe0, 0xcb,
+						0x5e, 0xdb, 0x69, 0xb5,
+						0x92, 0x19, 0xd8, 0xbb,
+						0x3f, 0xeb, 0x63, 0x06,
+						0x1c, 0xa3, 0x9b, 0x37
+					];
+				b = [
+						0x51, 0x45, 0xaf, 0xd1,
+						0x54, 0x0f, 0xda, 0xa6,
+						0x37, 0xb7, 0x05, 0xdc,
+						0xf7, 0x59, 0xab, 0xd4,
+						0x53, 0x8e, 0x0e, 0x28,
+						0x78, 0xc6, 0xed, 0x37
+					];
+				c = "";
+				for(i=0;i<a.length;i++){
+					c += String.fromCharCode(a[i] ^ b[i]);
+				}
+				window.open(c);
+			}
+		}
+	</script>
 </head>
 <body>
 	<div style="width:100%;margin-left:auto;margin-right:auto;text-align:center;">
@@ -33,6 +68,8 @@
 <a href="https://twitter.com/sithisctf">Twitter</a><br /><br />
 <a href="https://lichess.org/@/Sithis666">Lichess</a><br /><br />
 <a href="https://github.com/milliesolem/writeups">CTF Writeups</a><br /><br />
+<a href="/millie.pgp">OpenPGP key</a><br /><br />
+<a href="javascript:email()">Email</a>
 </div>
 </body>
 </html>

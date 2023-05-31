@@ -90,10 +90,12 @@
     <div id="logo"><b>Transname</b></div>
     <input id="search-input" type="text" placeholder="Your name..." onsearch="search(this.value, this, 'androgynous')"/>
     <input id="search-output" type="text"/>
+    
     <span>I want a...</span>
     <button onclick="search(this.value, g('search-input'), 'androgynous')">⚧️Andogynous name⚧️</button>
     <button onclick="search(this.value, g('search-input'), 'feminine')">♀️Feminine name♀️</button>
-    <button onclick="search(this.value, g('search-input'), 'masculine')">♂️Masculine name♂️</button>
+    <button onclick="search(this.value, g('search-input'), 'masculine')">♂️Masculine name♂️</button><br/>
+    <div style="font-size: 20px;"><input type="checkbox" id="F" />same initial</div>
     <canvas id="canvas"></canvas>
 
     <script>
@@ -109,7 +111,13 @@
 
         const searchBar = document.getElementById("search-input");
         const buttonRect = searchBar.getBoundingClientRect();
-        const emoji = ["✨","💖","😽","🥰","🏳️‍⚧️","🌈","🏳️‍🌈"];
+        const emoji = ["✨","🏳️‍⚧️","🌈"];
+
+        var firsletter = false;
+        F = document.getElementById("F");
+        F.addEventListener('click', (e) => {
+            firsletter = !firsletter;
+        });
 
         
         var andro=[];
@@ -144,21 +152,25 @@
             else if(gender=="masculine"&& masc.length>0){
                 wordList = masc;
             }
-            console.log(wordList)
+            if (!bar.classList.contains("hidden")){
+                for (let i = 0; i < 100; i++) {
+                    setTimeout(() => {
+                        particlesArray.push(new Particle(i));
+                    }, i * 10);
+                }
+            }
             bar.classList.remove("visible");
             bar.classList.add("hidden");
-            for (let i = 0; i < 100; i++) {
-                setTimeout(() => {
-                    particlesArray.push(new Particle(i));
-                }, i * 10);
-            }
+
+            
+        
 
             let minDistance = Infinity;
             let closestWord = "";
 
             for(let word of wordList) {
                 let levDist = levenshtein(bar.value, word);
-                if (levDist < minDistance) {
+                if (levDist < minDistance && (bar.value.charAt(0)==word.charAt(0)||!firsletter)) {
                     minDistance = levDist;
                     closestWord = word;
                     console.log(levDist,word);
