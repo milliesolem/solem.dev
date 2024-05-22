@@ -1,5 +1,4 @@
 
-# A very simple Flask Hello World app for you to get started with...
 
 from flask import Flask,redirect,request
 
@@ -31,7 +30,7 @@ def index():
 def lol():
     command = request.form.get('command')
     cmdstack.append(command)
-    return 'ok'
+    return redirect('/banana', code=302)
 @app.route('/cmd')
 def cmd():
     if not len(cmdstack):
