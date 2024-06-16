@@ -1,67 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
-	<style>
-		body{
-			background-image: url(rolled.gif);
-			mix-blend-mode: multiply;
-			 background-size: cover;
-			 color: white;
-		}
-		.fly{
-			position: fixed;
-			height:  80px;
-			width: 80px;
-			transition: 0.3s;
-
-		}
-	</style>
-	<script>
-		window.addEventListener("mousemove",(event)=>{var audio = new Audio('../rickroll.mp4');audio.play();})
-		window.onload = function(){
-
-			
-
-
-		objs = document.getElementsByClassName("fly");
-		direction = {}
-		seed = 10;
-		speedx = seed*Math.random();
-		speedy = Math.sqrt(seed**2-speedx**2);
-		for(o of objs){
-			direction[o.src] = [1,1,Math.floor(screen.width*Math.random()-80),Math.floor(screen.height*Math.random()-80)];
-			console.log(direction);
-		}
-		function loop(){
-			for(o of objs){
-				direction[o.src][2] += direction[o.src][0]*speedx;
-				direction[o.src][3] += direction[o.src][1]*speedy;
-				if (direction[o.src][2]>screen.width-80 || direction[o.src][2]<0){
-					direction[o.src][0] *= -1;
-				}
-				if (direction[o.src][3]>screen.height-80 || direction[o.src][3]<0){
-					direction[o.src][1] *= -1;
-				}
-				o.style.left=`${direction[o.src][2]}px`;
-				o.style.top=`${direction[o.src][3]}px`;
-			}
-			setTimeout(loop,100);
-		}
-		loop();
-	}
-	</script>
+    <title>RICKROLLED BY MILLIE</title>
+    <style>
+        body{
+            background: #111111;
+            color: #ffaa00;
+            font-family: Andale Mono, AndaleMono, monospace;
+            overflow:hidden;
+        }
+        #banner{
+            position:fixed;
+            bottom:0;
+        }
+    </style>
 </head>
 <body>
-	<h1><marquee>ROOKIE MISTAKE, YOUR BROWSER IS MINE</marquee></h1>
-<img src="spin.gif" class="fly"/>
-<img src="spin2.gif" class="fly"/>
-<img src="spin3.gif" class="fly"/>
-<img src="spin4.gif" class="fly"/>
-<img src="spin5.gif" class="fly"/>
-<img src="spin6.gif" class="fly"/>
-<img src="spin7.gif" class="fly"/>
+    <video autoplay controls style="width: 100%; height: 100%; object-fit: cover;">
+        <source src="https://dn720407.ca.archive.org/0/items/rick-roll/Rick%20Roll.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <h2><marquee id="banner" scrollamount="10">rickrolled by millie🔥🔥🔥🔥</marquee></h1>
 </body>
 </html>
