@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                margin: 0;
+                height: 100vh;
+                background: linear-gradient(
+                    to bottom,
+                    #d5146e 0% 33.33%,
+                    #fa9ff4 33.33% 66.66%,
+                    #7c004a 66.66% 100%
+                );
+                color: #D51433;
+                font-family: 'Arial Bold', sans-serif;
+                font-weight: 9000;
+                font-size:xx-large;
+                text-align: center;
+                vertical-align: middle;
+            }
+        </style>
+        <script>
+            counter = 0;
+            function openFire(){
+                fetch("https://staging3.api.app.ansly.com/api/votes/23/vote", {
+                    headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                    },
+                    "body": '{"options":17}',
+                    "method": "POST"
+                });
+                counter++;
+                document.getElementById("counter").innerHTML = counter.toString();
+                setTimeout(openFire, 200);
+            }
+            onload = openFire;
+        </script>
+    </head>
+    <body>
+        <h1 id="counter" style="position:fixed;top:-100px;left:32%;font-size:500%; color: white">0</h1>
+        <h1 style="position:fixed;top:25%;left:32%;font-size:500%;color: white">KVELINGS-</h1>
+        <h1 style="position:fixed;top:59%;left:32%;font-size:500%;color: white">SEX</h1>
+    </body>
+</html>
+
+
+
+
+
+
