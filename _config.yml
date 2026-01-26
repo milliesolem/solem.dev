@@ -1,0 +1,3 @@
+webrick:
+  headers:
+    Strict-Transport-Security: max-age=2592000; includeSubDomains; preload
