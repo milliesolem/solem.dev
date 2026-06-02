@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                margin: 0;
+                height: 100vh;
+                background: linear-gradient(
+                    to bottom,
+                    #E40303 0%,   #E40303 16.66%,
+                    #FF8C00 16.66%, #FF8C00 33.33%,
+                    #FFED00 33.33%, #FFED00 50%,
+                    #008026 50%,  #008026 66.66%,
+                    #004DFF 66.66%, #004DFF 83.33%,
+                    #750787 83.33%, #750787 100%
+                    );
+                color: #D51433;
+                font-family: 'Arial Bold', sans-serif;
+                font-weight: 9000;
+                font-size:xx-large;
+                text-align: center;
+                vertical-align: middle;
+            }
+            @media (prefers-color-scheme: light) {
+                    body {
+                        background-color: white;
+                        color: black;
+                    }
+                }
+                @media (prefers-color-scheme: dark) {
+                    body {
+                        background-color: black;
+                        color: white;
+                    }
+                }
+        </style>
+        <script>
+            counter = 0;
+            function openFire(){
+            fetch("https://pin-avstemning.nrk.no/v1/1.17905872", {
+                headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+                "body": '{"vote":"1"}',
+                "method": "POST"
+            });
+            counter++;
+            document.getElementById("counter").innerHTML = counter.toString();
+            setTimeout(openFire, 200);
+        }
+        onload = openFire;
+        </script>
+    </head>
+    <body>
+        <h1 id="counter" style="position:fixed;top:-100px;left:32%;font-size:500%; color: white">0</h1>
+        <h1 style="position:fixed;top:25%;left:32%;font-size:500%; COLOR: black">NO JUSTICE</h1>
+        <h1 style="position:fixed;top:59%;left:32%;font-size:500%;color: black">NO PEACE</h1>
+    </body>
+</html>
+
+
+
+
+
+
